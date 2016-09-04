@@ -1,0 +1,20 @@
+#!/usr/local/bin/perl
+use strict;
+use warnings;
+use 5.010;
+use Test::Simple tests => 3;
+use Data::Dumper::Simple;
+$Data::Dumper::Indent = 1;
+use TVTorrents;
+my $tvt = TVTorrents->new('test');
+my $config = TVTorrents::Configs::get_config('test');
+print Dumper($config);
+ok( defined($config), 'fetch config' );
+my @config_keys = keys( %{ $config->{sources} } );
+print Dumper( \@config_keys );
+ok( scalar(@config_keys), 'config has at least one key' );
+my $source_name = $config_keys[0];
+print 'Getting config: ' . Dumper($source_name);
+my $source = $tvt->{'sources'}->{$source_name};
+ok( defined($source), 'retrieved one site from config' );
+print Dumper($source);
